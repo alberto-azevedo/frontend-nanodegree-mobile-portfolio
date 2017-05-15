@@ -502,9 +502,9 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-  var x;
+  //var x;
   for (var pos = 0; pos < 5; pos ++) {
-  var phase = Math.sin(factor + pos)*100;
+  var phase = Math.sin(factor + pos)*100; // optimization
   for (var i = pos; i < itensLength; i += 5) { //itensLength
     items[i].style.left = leftsArray[i] + phase + 'px';
   }
@@ -540,10 +540,10 @@ function updatePositions() {
   window.animating = false;
 }
 
-var items = document.getElementsByClassName('mover');
-var itensLength = items.length;
-var scrollTop = document.body.scrollTop;
-var factor = scrollTop/1250;
+var items = document.getElementsByClassName('mover'); // pre calculating
+var itensLength = items.length; // pre calculating
+var scrollTop = document.body.scrollTop; // pre calculating
+var factor = scrollTop/1250; // pre calculating
 var leftsArray = [];
 // load phases array.
 // var phases = [];
@@ -557,8 +557,8 @@ var leftsArray = [];
 window.animating = false;
 function animationReadyCheck() {
   if ( !window.animating ) {
-    scrollTop = document.body.scrollTop;
-    factor = scrollTop/1250;
+    scrollTop = document.body.scrollTop; // pre calculating
+    factor = scrollTop/1250; // pre calculating
     window.animating = true;
     window.requestAnimationFrame(updatePositions);
   }
@@ -584,7 +584,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector("#movingPizzas1").appendChild(elem);
   }
 
-  items = document.querySelectorAll('.mover');
-  itensLength = items.length;
+  items = document.querySelectorAll('.mover'); // pre calculating
+  itensLength = items.length; // pre calculating
   updatePositions();
 });
