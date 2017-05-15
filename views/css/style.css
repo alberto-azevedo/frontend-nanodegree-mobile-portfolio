@@ -29,12 +29,18 @@ form {
   font-weight: 800;
 }
 
+#allContent {
+  will-change: transform;
+}
+
 .mover {
   position: fixed;
-  width: 256px;
+  width: 77.333px;
+  height: 100px;
+  left: 0;
+  right: 0;
   z-index: -1;
   backface-visibility: hidden; /* forum hint */
-  will-change: left;
 }
 
 .randomPizzaContainer {

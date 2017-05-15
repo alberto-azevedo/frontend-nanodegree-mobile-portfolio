@@ -23,13 +23,13 @@ python -m http.server 8080 (obs.: python3)
 
 Changes to optimise:
 
-1. Add "backface-visibility: hidden" and "will-change: left" to ".mover" in views/css/style.css
+1. Add to "backface-visibility: hidden" to ".mover" and "will-change: transform" to allContent in views/css/style.css
 
 2. determineDx now calls sizeSwitcher avoiding expensive calculation of pizza size.
 
 3. changePizzaSizes is avoiding access of style properties in loop.
 
-4. updatePositions changed main loop to avoid recalculation of phase. Using leftsArray, initialized on DOMContentLoaded. Removed all access to style properties, changed for variables ou constants.
+4. updatePositions changed main loop to avoid recalculation of phase. Using leftsArray, initialized on DOMContentLoaded. Removed all access to style properties, changed for variables ou constants. Using translateX.
 
 ### Optimization Tips and Tricks
 * [Optimizing Performance](https://developers.google.com/web/fundamentals/performance/ "web performance")

@@ -502,32 +502,14 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-  //var x;
+  var newX,phase;
   for (var pos = 0; pos < 5; pos ++) {
-  var phase = Math.sin(factor + pos)*100; // optimization
-  for (var i = pos; i < itensLength; i += 5) { //itensLength
-    items[i].style.left = leftsArray[i] + phase + 'px';
+  phase = Math.sin(factor + pos)*100; // optimization
+  for (var i = pos; i < itensLength; i += 5) {
+    newX = leftsArray[i] + phase + 'px'; // leftsArray[i] pre-calc
+    items[i].style.transform =  'translateX(' + newX + ')';
   }
 }
-
-  // for (var i=0; i < 5; i++) {
-  //   phases[i] = Math.sin(factor + i) * 100 + 'px';
-  //   //console.log("phases[i]:" + phases[i]);
-  // };
-  // for (var i = 0; i < itensLength; i++) {
-  //   //console.log("phases[i%5]:" + phases[i%5] + " i:" + i);
-  //   //items[i].style.left = items[i].basicLeft + phases[i%5];
-  //   //console.log("document.body.scrollTop:" + document.body.scrollTop);
-  //   var phase = Math.sin((factor) + (i % 5));
-  //   //var phase = Math.sin((factor / 1250) + (i % 5));
-  //   items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
-  //
-  //   // console.log("newLeft1:" + items[i].basicLeft + phases[i%5]);
-  //   // console.log("newLeft2:" + items[i].basicLeft + 100 * phase + 'px');
-  //   // console.log("ph1:" +  phases[i%5]);
-  //   // console.log("ph2:" + 100 * phase + 'px');
-  //
-  // }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
@@ -582,6 +564,7 @@ document.addEventListener('DOMContentLoaded', function() {
     leftsArray[i] = (i % cols) * s; // pre calculating
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     document.querySelector("#movingPizzas1").appendChild(elem);
+    //console.log("elem.basicLeft:" + elem.basicLeft + " elem.style.top:" + elem.style.top)
   }
 
   items = document.querySelectorAll('.mover'); // pre calculating
