@@ -427,32 +427,34 @@ var resizePizzas = function(size) {
     var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
     var oldSize = oldWidth / windowWidth;
 
-    // Changes the slider value to a percent width
-    function sizeSwitcher (size) {
-      switch(size) {
-        case "1":
-          return 0.25;
-        case "2":
-          return 0.3333;
-        case "3":
-          return 0.5;
-        default:
-          console.log("bug in sizeSwitcher");
-      }
-    }
-
     var newSize = sizeSwitcher(size);
     var dx = (newSize - oldSize) * windowWidth;
 
     return dx;
   }
 
+  // Changes the slider value to a percent width
+  function sizeSwitcher (size) {
+    switch(size) {
+      case "1":
+      return "25%";
+      case "2":
+      return "33.33%";
+      case "3":
+      return "50%";
+      default:
+      console.log("bug in sizeSwitcher");
+    }
+  }
+
+
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    var container = document.querySelectorAll(".randomPizzaContainer");
+    var numPizzas = container.length;
+    var newwidth = sizeSwitcher(size);
+    for (var i = 0; i < numPizzas; i++) {
+      container[i].style.width = newwidth;
     }
   }
 
@@ -500,12 +502,32 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-
-  var items = document.querySelectorAll('.mover');
-  for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+  var x;
+  for (var pos = 0; pos < 5; pos ++) {
+  var phase = Math.sin(factor + pos)*100;
+  for (var i = pos; i < itensLength; i += 5) { //itensLength
+    items[i].style.left = leftsArray[i] + phase + 'px';
   }
+}
+
+  // for (var i=0; i < 5; i++) {
+  //   phases[i] = Math.sin(factor + i) * 100 + 'px';
+  //   //console.log("phases[i]:" + phases[i]);
+  // };
+  // for (var i = 0; i < itensLength; i++) {
+  //   //console.log("phases[i%5]:" + phases[i%5] + " i:" + i);
+  //   //items[i].style.left = items[i].basicLeft + phases[i%5];
+  //   //console.log("document.body.scrollTop:" + document.body.scrollTop);
+  //   var phase = Math.sin((factor) + (i % 5));
+  //   //var phase = Math.sin((factor / 1250) + (i % 5));
+  //   items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+  //
+  //   // console.log("newLeft1:" + items[i].basicLeft + phases[i%5]);
+  //   // console.log("newLeft2:" + items[i].basicLeft + 100 * phase + 'px');
+  //   // console.log("ph1:" +  phases[i%5]);
+  //   // console.log("ph2:" + 100 * phase + 'px');
+  //
+  // }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
@@ -515,10 +537,36 @@ function updatePositions() {
     var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
     logAverageFrame(timesToUpdatePosition);
   }
+  window.animating = false;
 }
 
+var items = document.getElementsByClassName('mover');
+var itensLength = items.length;
+var scrollTop = document.body.scrollTop;
+var factor = scrollTop/1250;
+var leftsArray = [];
+// load phases array.
+// var phases = [];
+// for (var i=0; i < 5; i++) {
+//   phases[i] = Math.sin(factor + i) * 100 ;
+//   //console.log("phases[i]:" + phases[i]);
+// };
+
+
+// another forum hint based on Pauls comment
+window.animating = false;
+function animationReadyCheck() {
+  if ( !window.animating ) {
+    scrollTop = document.body.scrollTop;
+    factor = scrollTop/1250;
+    window.animating = true;
+    window.requestAnimationFrame(updatePositions);
+  }
+}
+window.addEventListener('scroll', animationReadyCheck);
+
 // runs updatePositions on scroll
-window.addEventListener('scroll', updatePositions);
+//window.addEventListener('scroll', updatePositions);
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
@@ -531,8 +579,12 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.height = "100px";
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
+    leftsArray[i] = (i % cols) * s; // pre calculating
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     document.querySelector("#movingPizzas1").appendChild(elem);
   }
+
+  items = document.querySelectorAll('.mover');
+  itensLength = items.length;
   updatePositions();
 });

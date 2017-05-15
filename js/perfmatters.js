@@ -10,5 +10,6 @@ function logCRP() {
 }
 
 window.addEventListener("load", function(event) {
+  google_analytics();
   logCRP();
 });
