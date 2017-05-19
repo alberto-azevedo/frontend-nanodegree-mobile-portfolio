@@ -15,9 +15,11 @@ python -m http.server 8080 (obs.: python3)
 <script async src="js/perfmatters.js"></script>
 <script async src="js/analytics.js"></script>
 
-3. Removing high overhead font load
+3. Using Web Font Loader for loading Fonts asynchronously (https://github.com/typekit/webfontloader). As hinted by the first reviewer ;) , tks.
 
 4. Inlinning print and style css files.
+
+5. Using pizzeria thumbnail for fast image download.(Another reviewer hint)
 
 #### Part 2: Optimize Frames per Second in pizza.html
 
@@ -30,6 +32,10 @@ Changes to optimise:
 3. changePizzaSizes is avoiding access of style properties in loop.
 
 4. updatePositions changed main loop to avoid recalculation of phase. Using leftsArray, initialized on DOMContentLoaded. Removed all access to style properties, changed for variables ou constants. Using translateX.
+
+5. Changed number of pizzas as a function of screen height as hinted by reviewer. (Tks again)
+
+6. Using pizzeria image half of original size for fast image download.
 
 ### Optimization Tips and Tricks
 * [Optimizing Performance](https://developers.google.com/web/fundamentals/performance/ "web performance")
