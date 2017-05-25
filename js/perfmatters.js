@@ -10,6 +10,8 @@ function logCRP() {
 }
 
 window.addEventListener("load", function(event) {
-  google_analytics();
+  if (typeof google_analytics === "function") {
+    google_analytics();
+  }
   logCRP();
 });
